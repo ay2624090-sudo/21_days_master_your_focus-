@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>21 Days — Master Your Focus</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f6f5f2;
+      color: #18181b;
+    }
+    /* Subtle background watermark for the sheet view */
+    .focus-watermark {
+      position: relative;
+      overflow: hidden;
+    }
+    .focus-watermark::before {
+      content: "FOCUS";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-24deg);
+      font-size: clamp(5rem, 16vw, 13rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: rgba(217, 70, 37, 0.06);
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+      z-index: 0;
+    }
+    .custom-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 1.35rem;
+      height: 1.35rem;
+      border: 2px solid #52525b;
+      border-radius: 0.25rem;
+      background-color: #ffffff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .custom-checkbox:hover {
+      border-color: #d94625;
+      background-color: #fff7f5;
+    }
+    .custom-checkbox:checked {
+      background-color: #d94625;
+      border-color: #d94625;
+    }
+    .custom-checkbox:checked::after {
+      content: "";
+      width: 0.4rem;
+      height: 0.72rem;
+      border: solid white;
+      border-width: 0 2.5px 2.5px 0;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+    /* Vertical headers for desktop 21-day matrix */
+    .vertical-header {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      max-height: 150px;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top App Banner / How-It-Works Beginner Bar -->
+  <div class="bg-zinc-900 text-zinc-100 border-b border-zinc-800 no-print">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center px-2 py-0.5 rounded font-bold bg-[#d94625] text-white uppercase tracking-wider text-[11px]">Step 2 • v2.0 App</span>
+        <span class="text-zinc-300">Auto-saves to your browser • Now with Trend Chart, CSV Export & Certificate</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <button id="btnLoadDemo" type="button" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-medium transition">
+          Load Sample Progress
+        </button>
+        <button id="btnCustomizeHabits" type="button" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-medium transition">
+          Customize 10 Checkpoints
+        </button>
+        <button id="btnExportCSV" type="button" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-emerald-300 font-medium transition">
+          Export CSV
+        </button>
+        <button id="btnOpenCertificate" type="button" class="px-2.5 py-1 rounded bg-[#d94625] hover:bg-[#c23b1d] text-white font-semibold transition">
+          Mission Certificate
+        </button>
+        <button id="btnOpenResetModal" type="button" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-red-900/60 text-red-300 font-medium transition">
+          Reset Sheet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- PDF-Style Hero Header -->
+    <header class="bg-white rounded-2xl shadow-sm border border-zinc-200 p-5 sm:p-7">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div>
+          <p class="text-xs sm:text-sm font-bold tracking-[0.22em] text-zinc-500 uppercase mb-1">
+            PERSONAL MISSION <span class="text-[#d94625] mx-1">·</span> NO EXCUSES
+          </p>
+          <h1 class="text-2xl sm:text-4xl font-black tracking-tight text-zinc-900">
+            <span class="text-[#d94625]">21 DAYS</span> — MASTER YOUR FOCUS
+          </h1>
+          <p class="italic text-zinc-600 text-sm sm:text-base mt-1">
+            “Don’t aim for motivation. Build discipline.”
+          </p>
+        </div>
+
+        <!-- Start Date, End Date & Success Threshold Controls -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-zinc-50 p-3.5 rounded-xl border border-zinc-200">
+          <div>
+            <label for="startDateInput" class="block text-[11px] font-bold uppercase tracking-wider text-zinc-500 mb-1">Start Date</label>
+            <input id="startDateInput" type="date" class="w-full px-2.5 py-1.5 text-sm bg-white border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d94625]" />
+          </div>
+          <div>
+            <label for="endDateInput" class="block text-[11px] font-bold uppercase tracking-wider text-zinc-500 mb-1">End Date (Day 21)</label>
+            <input id="endDateInput" type="date" readonly class="w-full px-2.5 py-1.5 text-sm bg-zinc-100 text-zinc-600 border border-zinc-200 rounded-lg cursor-not-allowed" />
+          </div>
+          <div>
+            <label for="thresholdSelect" class="block text-[11px] font-bold uppercase tracking-wider text-zinc-500 mb-1">Success Goal / Day</label>
+            <select id="thresholdSelect" class="w-full px-2.5 py-1.5 text-sm bg-white border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d94625]">
+              <option value="6">≥ 6 / 10 Checkpoints</option>
+              <option value="7">≥ 7 / 10 Checkpoints</option>
+              <option value="8" selected>≥ 8 / 10 Checkpoints</option>
+              <option value="9">≥ 9 / 10 Checkpoints</option>
+              <option value="10">10 / 10 (Strict Mode)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Mode Switcher + Quick Summary Badges -->
+      <div class="mt-6 pt-5 border-t border-zinc-200 flex flex-wrap items-center justify-between gap-4 no-print">
+        <div class="inline-flex rounded-xl bg-zinc-100 p-1 border border-zinc-200" role="tablist">
+          <button id="tabSheetView" type="button" class="px-4 py-2 rounded-lg text-sm font-bold transition bg-zinc-900 text-white shadow-sm">
+            21-Day Master Sheet
+          </button>
+          <button id="tabDailyView" type="button" class="px-4 py-2 rounded-lg text-sm font-bold transition text-zinc-700 hover:text-zinc-900">
+            Daily Focus Mode + Timer
+          </button>
+          <button id="tabInsightsView" type="button" class="px-4 py-2 rounded-lg text-sm font-bold transition text-zinc-700 hover:text-zinc-900">
+            Habit Analytics
+          </button>
+        </div>
+
+        <!-- Rule #3 Status Pill ("Never miss two days in a row") -->
+        <div id="ruleThreeBanner" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span id="ruleThreeText">Rule #3 Check: On track — never miss two days in a row!</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: FULL 21-DAY MASTER SHEET (DEFAULT) -->
+    <!-- ========================================== -->
+    <section id="sectionSheetView" class="space-y-6">
+      <div class="bg-white rounded-2xl shadow-sm border border-zinc-300 overflow-hidden focus-watermark">
+        <div class="overflow-x-auto relative z-10">
+          <table class="w-full border-collapse text-left">
+            <thead>
+              <tr class="bg-zinc-900 text-white">
+                <th class="p-3 text-center text-xs font-extrabold uppercase tracking-wider border-r border-zinc-700 w-16 align-bottom">
+                  DAY
+                </th>
+                <!-- Dynamic 10 habit column headers rendered by JS -->
+                <th id="habitHeader1" class="p-2 border-r border-zinc-700 align-bottom text-center w-11"></th>
+                <th id="habitHeader2" class="p-2 border-r border-zinc-700 align-bottom text-center w-11"></th>
+                <th id="habitHeader3" class="p-2 border-r border-zinc-700 align-bottom text-center w-11"></th>
+                <th id="habitHeader4" class="p-2 border-r border-zinc-700 align-bottom text-center w-11"></th>
+                <th id="habitHeader5" class="p-2 border-r border-zinc-700 align-bottom text-center w-11"></th>
+                <th id="habitHeader6" class="p-2 border-r border-zinc-700 align-bottom text-center w-11"></th>
+                <th id="habitHeader7" class="p-2 border-r border-zinc-700 align-bottom text-center w-11"></th>
+                <th id="habitHeader8" class="p-2 border-r border-zinc-700 align-bottom text-center w-11"></th>
+                <th id="habitHeader9" class="p-2 border-r border-zinc-700 align-bottom text-center w-11"></th>
+                <th id="habitHeader10" class="p-2 border-r border-zinc-700 align-bottom text-center w-11"></th>
+                <th class="p-3 text-center text-xs font-extrabold uppercase tracking-wider border-r border-zinc-700 w-24 align-middle">
+                  DAILY<br/>SCORE
+                </th>
+                <th class="p-3 text-center text-xs font-extrabold uppercase tracking-wider border-r border-zinc-700 min-w-[200px] align-middle">
+                  TODAY’S BIGGEST<br/>DISTRACTION
+                </th>
+                <th class="p-3 text-center text-xs font-extrabold uppercase tracking-wider min-w-[200px] align-middle">
+                  TOMORROW I WILL<br/>IMPROVE
+                </th>
+              </tr>
+            </thead>
+            <tbody id="sheetTableBody" class="divide-y divide-zinc-300 text-sm">
+              <!-- Populated by JS for Days 1..21 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: DAILY FOCUS MODE + BUILT-IN TIMERS -->
+    <!-- ========================================== -->
+    <section id="sectionDailyView" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left 2 Columns: Active Day Checkpoints & Reflection -->
+        <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-zinc-200 p-5 sm:p-6 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-zinc-200">
+            <div class="flex items-center gap-3">
+              <button id="btnPrevDay" type="button" class="p-2 rounded-lg border border-zinc-300 hover:bg-zinc-100 text-zinc-700 font-bold" title="Previous Day">
+                ←
+              </button>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span id="dailyViewDayBadge" class="px-2.5 py-0.5 rounded-md text-xs font-extrabold uppercase bg-[#d94625] text-white">DAY 1</span>
+                  <span id="dailyViewDateLabel" class="text-xs font-medium text-zinc-500"></span>
+                </div>
+                <h2 class="text-xl font-black text-zinc-900 mt-0.5">Daily Mission Checkpoints</h2>
+              </div>
+              <button id="btnNextDay" type="button" class="p-2 rounded-lg border border-zinc-300 hover:bg-zinc-100 text-zinc-700 font-bold" title="Next Day">
+                →
+              </button>
+            </div>
+
+            <!-- Score Ring Display -->
+            <div class="flex items-center gap-3 bg-zinc-50 px-4 py-2.5 rounded-xl border border-zinc-200">
+              <div class="text-right">
+                <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Daily Score</p>
+                <p id="dailyViewScoreText" class="text-2xl font-black text-zinc-900">0 / 10</p>
+              </div>
+              <button id="btnCheckAllDay" type="button" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-zinc-900 hover:bg-zinc-800 text-white transition">
+                Mark All 10
+              </button>
+            </div>
+          </div>
+
+          <!-- 10 Interactive Habit Cards for the Active Day -->
+          <div id="dailyHabitsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Daily Reflections (Distraction & Improvement) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-zinc-200">
+            <div>
+              <label for="dailyDistractionInput" class="block text-xs font-extrabold uppercase tracking-wider text-zinc-700 mb-1.5">
+                Today’s Biggest Distraction
+              </label>
+              <textarea id="dailyDistractionInput" rows="2" placeholder="e.g., Checked social media after lunch..." class="w-full p-3 text-sm border border-zinc-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d94625]"></textarea>
+            </div>
+            <div>
+              <label for="dailyImproveInput" class="block text-xs font-extrabold uppercase tracking-wider text-zinc-700 mb-1.5">
+                Tomorrow I Will Improve
+              </label>
+              <textarea id="dailyImproveInput" rows="2" placeholder="e.g., Leave phone in another room during study blocks..." class="w-full p-3 text-sm border border-zinc-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d94625]"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Built-in Focus Timer + Water Intake Helper -->
+        <div class="space-y-6">
+          <!-- Focus & Meditation Timer -->
+          <div class="bg-zinc-900 text-white rounded-2xl shadow-sm p-5 sm:p-6 space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-widest text-[#d94625]">Built-In Focus Tool</span>
+              <span id="timerModeLabel" class="text-xs text-zinc-400">Study Block (25m)</span>
+            </div>
+            <div class="text-center py-4 bg-zinc-800/80 rounded-xl border border-zinc-700">
+              <div id="timerDisplay" class="text-5xl font-black tracking-tight font-mono">25:00</div>
+              <p id="timerStatusText" class="text-xs text-zinc-400 mt-1.5">Select a preset or start focusing</p>
+            </div>
+
+            <!-- Preset Buttons Linked to Habits #3, #7, #8 -->
+            <div class="grid grid-cols-3 gap-2 text-xs">
+              <button id="btnPresetStudy" type="button" class="py-2 px-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 font-semibold border border-zinc-700 transition">
+                Study (25m)
+              </button>
+              <button id="btnPresetMeditate" type="button" class="py-2 px-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 font-semibold border border-zinc-700 transition">
+                Meditate (10m)
+              </button>
+              <button id="btnPresetRead" type="button" class="py-2 px-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 font-semibold border border-zinc-700 transition">
+                Reading (20m)
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2 pt-1">
+              <button id="btnTimerStartPause" type="button" class="flex-1 py-2.5 rounded-xl font-bold bg-[#d94625] hover:bg-[#c23b1d] text-white transition">
+                Start Timer
+              </button>
+              <button id="btnTimerReset" type="button" class="px-4 py-2.5 rounded-xl font-bold bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition">
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Hydration Tracker Helper (For Checkpoint #6: Water >= 2.5 L) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 p-5 sm:p-6 space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-[11px] font-extrabold uppercase tracking-wider text-sky-600">Checkpoint #6 Helper</span>
+                <h3 class="text-base font-bold text-zinc-900">Water Tracker (Goal: 2.5 L)</h3>
+              </div>
+              <span id="waterAmountBadge" class="text-lg font-black text-sky-700">0.00 / 2.5 L</span>
+            </div>
+            <div class="w-full bg-zinc-100 h-3 rounded-full overflow-hidden border border-zinc-200">
+              <div id="waterProgressBar" class="bg-sky-500 h-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div class="flex items-center justify-between gap-2">
+              <button id="btnWaterMinus" type="button" class="px-3 py-2 rounded-lg border border-zinc-300 hover:bg-zinc-100 text-xs font-bold text-zinc-700">
+                − 0.25 L
+              </button>
+              <button id="btnWaterPlus" type="button" class="flex-1 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition">
+                + Add Glass (0.25 L)
+              </button>
+              <button id="btnWaterFull" type="button" class="px-3 py-2 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-xs font-bold text-zinc-800">
+                2.5 L Done
+              </button>
+            </div>
+            <p class="text-[11px] text-zinc-500">
+              Reaching 2.5 L automatically checks off <strong>Checkpoint #6 (Water ≥ 2.5 L)</strong> for the selected day.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: HABIT ANALYTICS & CONSISTENCY      -->
+    <!-- ========================================== -->
+    <section id="sectionInsightsView" class="hidden space-y-6">
+      <!-- Top KPI Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl p-4 border border-zinc-200 shadow-sm">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Average Daily Score</p>
+          <p id="kpiAvgScore" class="text-2xl font-black text-zinc-900 mt-1">0.0 / 10</p>
+          <p class="text-xs text-zinc-500 mt-0.5">Across logged days</p>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-zinc-200 shadow-sm">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Perfect 10/10 Days</p>
+          <p id="kpiPerfectDays" class="text-2xl font-black text-emerald-700 mt-1">0 days</p>
+          <p class="text-xs text-zinc-500 mt-0.5">100% checkpoint completion</p>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-zinc-200 shadow-sm">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Strongest Habit</p>
+          <p id="kpiStrongestHabit" class="text-base font-black text-zinc-900 mt-1 truncate">—</p>
+          <p id="kpiStrongestHabitSub" class="text-xs text-emerald-700 font-semibold mt-0.5">Check boxes to see top habit</p>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-zinc-200 shadow-sm">
+          <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Focus Leak to Watch</p>
+          <p id="kpiWeakestHabit" class="text-base font-black text-[#d94625] mt-1 truncate">—</p>
+          <p id="kpiWeakestHabitSub" class="text-xs text-zinc-500 mt-0.5">Habit needing most consistency</p>
+        </div>
+      </div>
+
+      <!-- 21-Day Daily Score Visual Trend Chart -->
+      <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 p-5 sm:p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-lg font-black text-zinc-900 uppercase tracking-tight">21-Day Daily Score Trend</h2>
+            <p class="text-xs text-zinc-500">Visualizes your daily score out of 10 against your target threshold line (click any day bar to open that day).</p>
+          </div>
+          <div class="flex items-center gap-3 text-xs font-semibold">
+            <span class="inline-flex items-center gap-1.5 text-emerald-700"><span class="w-3 h-3 rounded-sm bg-emerald-600 inline-block"></span> Meets Target</span>
+            <span class="inline-flex items-center gap-1.5 text-amber-700"><span class="w-3 h-3 rounded-sm bg-amber-500 inline-block"></span> In Progress</span>
+            <span class="inline-flex items-center gap-1.5 text-[#d94625]"><span class="w-4 border-t-2 border-dashed border-[#d94625] inline-block"></span> Goal Line</span>
+          </div>
+        </div>
+
+        <div class="relative h-56 pt-6 pb-2 px-2 bg-zinc-50 rounded-xl border border-zinc-200 flex items-end gap-1.5 sm:gap-2 overflow-x-auto">
+          <!-- Dashed Target Threshold Line -->
+          <div id="chartThresholdLine" class="absolute left-0 right-0 border-t-2 border-dashed border-[#d94625] pointer-events-none z-10 flex justify-end pr-3" style="bottom: 80%;">
+            <span id="chartThresholdLabel" class="bg-[#d94625] text-white text-[10px] font-bold px-1.5 py-0.5 rounded -mt-3">Goal: 8/10</span>
+          </div>
+          <!-- 21 Day Bars Container -->
+          <div id="trendChartBars" class="w-full h-full flex items-end justify-between gap-1 sm:gap-2 relative z-0">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Per-Habit Breakdown -->
+      <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 p-5 sm:p-6 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-lg font-black text-zinc-900 uppercase tracking-tight">Checkpoint Consistency Breakdown</h2>
+            <p class="text-xs text-zinc-500">See which of your 10 daily habits are strongest and which need extra attention across the 21 days.</p>
+          </div>
+          <span id="overallCompletionBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-zinc-900 text-white">0 / 210 Total Checkpoints</span>
+        </div>
+        <div id="habitBreakdownList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Distraction & Improvement Reflection Journal Summary -->
+      <div class="bg-white rounded-2xl shadow-sm border border-zinc-200 p-5 sm:p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-lg font-black text-zinc-900 uppercase tracking-tight">Distraction & Improvement Log</h2>
+            <p class="text-xs text-zinc-500">Reviews every distraction and improvement action you recorded so you can eliminate repeat triggers.</p>
+          </div>
+          <button id="btnAnalyticsExportCSV" type="button" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-zinc-900 hover:bg-zinc-800 text-white transition">
+            Download Full CSV Report
+          </button>
+        </div>
+        <div id="distractionLogList" class="space-y-2.5">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- MY 21-DAY STREAK BAR (MATCHING PDF DESIGN) -->
+    <!-- ========================================== -->
+    <section class="bg-white rounded-2xl shadow-sm border border-zinc-300 overflow-hidden">
+      <div class="bg-zinc-900 text-white px-5 py-2.5 flex items-center justify-between border-l-8 border-[#d94625]">
+        <h2 class="text-sm sm:text-base font-extrabold uppercase tracking-wider">MY 21-DAY STREAK</h2>
+        <span class="text-xs sm:text-sm font-bold text-zinc-300">Day 1 → Day 21 <span class="hidden sm:inline text-zinc-400 font-normal">(Click any circle to jump to that day)</span></span>
+      </div>
+
+      <div class="p-5 space-y-5">
+        <!-- 21 Streak Circles -->
+        <div id="streakCirclesContainer" class="grid grid-cols-7 sm:grid-cols-11 lg:grid-cols-21 gap-2 justify-items-center">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Bottom Summary Metrics matching PDF -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 border-t border-zinc-200 text-sm">
+          <div class="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200 flex items-center justify-between">
+            <span class="font-bold text-zinc-700">Days Completed:</span>
+            <span id="statDaysCompleted" class="text-lg font-black text-zinc-900">0 / 21</span>
+          </div>
+          <div class="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200 flex items-center justify-between">
+            <span class="font-bold text-zinc-700">Best Streak:</span>
+            <span id="statBestStreak" class="text-lg font-black text-[#d94625]">0 days</span>
+          </div>
+          <div class="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200 flex items-center justify-between">
+            <span class="font-bold text-zinc-700">Total Successful Days:</span>
+            <span id="statSuccessfulDays" class="text-lg font-black text-emerald-700">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- BOTTOM SPLIT: CHALLENGE RULES & LEVEL UP   -->
+    <!-- ========================================== -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- CHALLENGE RULES -->
+      <div class="bg-white rounded-2xl shadow-sm border-2 border-zinc-800 p-5 sm:p-6 flex flex-col justify-between">
+        <div>
+          <h2 class="text-base sm:text-lg font-black uppercase tracking-wider text-zinc-900 pb-2 border-b-2 border-zinc-200">
+            CHALLENGE RULES
+          </h2>
+          <ol class="mt-4 space-y-2.5 text-sm sm:text-base text-zinc-800 font-medium">
+            <li class="flex items-start gap-2.5">
+              <span class="font-black text-[#d94625]">1.</span>
+              <span>No cheating yourself. Be brutally honest.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="font-black text-[#d94625]">2.</span>
+              <span>If I fail one checkpoint, I don’t quit the day.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="font-black text-[#d94625]">3.</span>
+              <span>Never miss two days in a row.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="font-black text-[#d94625]">4.</span>
+              <span>Phone is a tool, not entertainment during study.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="font-black text-[#d94625]">5.</span>
+              <span>Entertainment comes after important work.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="font-black text-[#d94625]">6.</span>
+              <span>Sleep is part of productivity.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="font-black text-[#d94625]">7.</span>
+              <span>Focus on consistency, not perfection.</span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="mt-5 pt-4 border-t border-zinc-200 flex items-center justify-between">
+          <label class="flex items-center gap-2.5 cursor-pointer select-none text-xs sm:text-sm font-bold text-zinc-700">
+            <input id="pledgeCheckbox" type="checkbox" class="custom-checkbox" />
+            <span>I commit to following all 7 Challenge Rules with zero excuses.</span>
+          </label>
+          <span id="pledgeBadge" class="hidden px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800">Committed</span>
+        </div>
+      </div>
+
+      <!-- LEVEL UP REWARDS -->
+      <div class="bg-white rounded-2xl shadow-sm border-2 border-zinc-800 p-5 sm:p-6">
+        <div class="flex items-center justify-between pb-2 border-b-2 border-zinc-200">
+          <h2 class="text-base sm:text-lg font-black uppercase tracking-wider text-zinc-900">
+            LEVEL UP
+          </h2>
+          <span class="text-xs font-semibold text-zinc-500">Unlocks automatically as you complete days</span>
+        </div>
+
+        <div class="mt-4 space-y-4">
+          <!-- 7 Days -->
+          <div id="rewardCard7" class="flex items-start gap-3.5 p-3 rounded-xl border border-zinc-200 bg-zinc-50/60 transition">
+            <div class="w-10 h-10 rounded-full border-2 border-zinc-900 flex items-center justify-center font-black text-sm shrink-0 bg-white text-zinc-900">
+              7
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <p class="text-sm font-extrabold text-zinc-900">
+                  7 DAYS <span class="text-[#d94625]">→</span> <span class="font-semibold">Small reward</span>
+                </p>
+                <span id="rewardStatus7" class="text-[11px] font-bold px-2 py-0.5 rounded bg-zinc-200 text-zinc-700">0 / 7 Days</span>
+              </div>
+              <div class="mt-1.5 flex items-center gap-2">
+                <span class="text-xs text-zinc-500 shrink-0">my reward:</span>
+                <input id="rewardInput7" type="text" placeholder="e.g., Favorite coffee or movie night" class="w-full text-sm bg-transparent border-b border-zinc-400 focus:border-[#d94625] focus:outline-none py-0.5 text-zinc-800" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 14 Days -->
+          <div id="rewardCard14" class="flex items-start gap-3.5 p-3 rounded-xl border border-zinc-200 bg-zinc-50/60 transition">
+            <div class="w-10 h-10 rounded-full bg-zinc-900 text-white flex items-center justify-center font-black text-sm shrink-0">
+              14
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <p class="text-sm font-extrabold text-zinc-900">
+                  14 DAYS <span class="text-[#d94625]">→</span> <span class="font-semibold">Bigger reward</span>
+                </p>
+                <span id="rewardStatus14" class="text-[11px] font-bold px-2 py-0.5 rounded bg-zinc-200 text-zinc-700">0 / 14 Days</span>
+              </div>
+              <div class="mt-1.5 flex items-center gap-2">
+                <span class="text-xs text-zinc-500 shrink-0">my reward:</span>
+                <input id="rewardInput14" type="text" placeholder="e.g., New book, gear, or restaurant dinner" class="w-full text-sm bg-transparent border-b border-zinc-400 focus:border-[#d94625] focus:outline-none py-0.5 text-zinc-800" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 21 Days -->
+          <div id="rewardCard21" class="flex items-start gap-3.5 p-3 rounded-xl border border-zinc-200 bg-zinc-50/60 transition">
+            <div class="w-10 h-10 rounded-full bg-[#d94625] text-white flex items-center justify-center font-black text-sm shrink-0">
+              21
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <p class="text-sm font-extrabold text-zinc-900">
+                  <span class="text-[#d94625]">21 DAYS →</span> <span class="font-semibold">Major reward</span>
+                </p>
+                <span id="rewardStatus21" class="text-[11px] font-bold px-2 py-0.5 rounded bg-zinc-200 text-zinc-700">0 / 21 Days</span>
+              </div>
+              <div class="mt-1.5 flex items-center gap-2">
+                <span class="text-xs text-zinc-500 shrink-0">my reward:</span>
+                <input id="rewardInput21" type="text" placeholder="e.g., Weekend trip or milestone purchase" class="w-full text-sm bg-transparent border-b border-zinc-400 focus:border-[#d94625] focus:outline-none py-0.5 text-zinc-800" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Motivational Quote -->
+    <footer class="py-4 text-center">
+      <div class="flex items-center justify-center gap-4">
+        <div class="h-px bg-zinc-300 flex-1 max-w-xs"></div>
+        <p class="text-sm sm:text-lg font-extrabold italic text-zinc-800">
+          “Your future is being built by what you do today.”
+        </p>
+        <div class="h-px bg-zinc-300 flex-1 max-w-xs"></div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL: CUSTOMIZE 10 CHECKPOINTS            -->
+  <!-- ========================================== -->
+  <div id="modalCustomize" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-zinc-200 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-zinc-200 pb-3">
+        <h3 class="text-lg font-black text-zinc-900">Customize Your 10 Daily Checkpoints</h3>
+        <button id="btnCloseCustomize" type="button" class="text-zinc-400 hover:text-zinc-700 font-bold text-lg">✕</button>
+      </div>
+      <p class="text-xs text-zinc-600">
+        By default, these match the 10 checkpoints on your 21-Day Focus Challenge sheet. You can tailor any label to fit your personal mission.
+      </p>
+      <div id="customHabitsInputs" class="space-y-2.5">
+        <!-- Populated by JS -->
+      </div>
+      <div class="flex items-center justify-between pt-3 border-t border-zinc-200 gap-2">
+        <button id="btnRestoreDefaultHabits" type="button" class="px-3 py-2 rounded-lg text-xs font-bold text-zinc-600 hover:bg-zinc-100">
+          Restore Original 10
+        </button>
+        <div class="flex items-center gap-2">
+          <button id="btnCancelCustomize" type="button" class="px-4 py-2 rounded-lg text-xs font-bold border border-zinc-300 text-zinc-700 hover:bg-zinc-50">
+            Cancel
+          </button>
+          <button id="btnSaveCustomize" type="button" class="px-4 py-2 rounded-lg text-xs font-bold bg-[#d94625] text-white hover:bg-[#c23b1d]">
+            Save Checkpoints
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: RESET CONFIRMATION                  -->
+  <!-- ========================================== -->
+  <div id="modalReset" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-zinc-200 space-y-4">
+      <h3 class="text-lg font-black text-zinc-900">Reset 21-Day Challenge Sheet?</h3>
+      <p class="text-sm text-zinc-600">
+        This will clear all checked boxes, daily distraction notes, and streak progress so you can start a fresh 21-day cycle.
+      </p>
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button id="btnCancelReset" type="button" class="px-4 py-2 rounded-lg text-xs font-bold border border-zinc-300 text-zinc-700 hover:bg-zinc-50">
+          Cancel
+        </button>
+        <button id="btnConfirmReset" type="button" class="px-4 py-2 rounded-lg text-xs font-bold bg-red-600 text-white hover:bg-red-700">
+          Yes, Reset Everything
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: 21-DAY MISSION CERTIFICATE          -->
+  <!-- ========================================== -->
+  <div id="modalCertificate" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 sm:p-8 shadow-xl border-4 border-zinc-900 space-y-5">
+      <div class="flex items-center justify-between border-b border-zinc-200 pb-3 no-print">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-[#d94625]">Personal Mission Record</span>
+        <button id="btnCloseCertificate" type="button" class="text-zinc-400 hover:text-zinc-700 font-bold text-lg">✕</button>
+      </div>
+
+      <div class="text-center space-y-2 py-2">
+        <p class="text-xs font-bold tracking-[0.25em] text-zinc-500 uppercase">OFFICIAL DISCIPLINE RECORD</p>
+        <h3 class="text-2xl sm:text-3xl font-black text-zinc-900 uppercase">21 DAYS — MASTER YOUR FOCUS</h3>
+        <p class="text-xs italic text-zinc-500">“Don’t aim for motivation. Build discipline.”</p>
+
+        <div class="pt-3 max-w-xs mx-auto">
+          <label for="certNameInput" class="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1 no-print">Your Name on Certificate</label>
+          <input id="certNameInput" type="text" placeholder="Enter your name..." class="w-full text-center text-lg font-black text-zinc-900 border-b-2 border-[#d94625] focus:outline-none py-1 bg-transparent" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-center">
+        <div>
+          <p class="text-[10px] font-bold uppercase text-zinc-500">Days Logged</p>
+          <p id="certDaysLogged" class="text-lg font-black text-zinc-900">0 / 21</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-bold uppercase text-zinc-500">Successful Days</p>
+          <p id="certSuccessDays" class="text-lg font-black text-emerald-700">0</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-bold uppercase text-zinc-500">Best Streak</p>
+          <p id="certBestStreak" class="text-lg font-black text-[#d94625]">0 days</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-bold uppercase text-zinc-500">Total Checkpoints</p>
+          <p id="certTotalPoints" class="text-lg font-black text-zinc-900">0 / 210</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs text-zinc-500 pt-2 border-t border-zinc-200">
+        <span id="certDateSpan">Mission Window: —</span>
+        <span class="font-bold text-zinc-800">Status: <span id="certRankBadge" class="text-[#d94625]">In Progress</span></span>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 no-print">
+        <button id="btnPrintCertificate" type="button" class="px-4 py-2 rounded-lg text-xs font-bold bg-zinc-900 text-white hover:bg-zinc-800">
+          Print / Save PDF
+        </button>
+        <button id="btnDoneCertificate" type="button" class="px-4 py-2 rounded-lg text-xs font-bold bg-[#d94625] text-white hover:bg-[#c23b1d]">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotice" class="fixed bottom-4 right-4 z-50 hidden bg-zinc-900 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg border border-zinc-700">
+    Saved!
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'focus_challenge_21_days_v1';
+
+    const DEFAULT_HABITS = [
+      { id: 0, title: 'Screen Time', target: '≤ 3 hrs' },
+      { id: 1, title: 'Sleep', target: '≥ 8 hrs' },
+      { id: 2, title: 'Study', target: '≥ 9 hrs' },
+      { id: 3, title: 'No scrolling', target: 'during study' },
+      { id: 4, title: 'Exercise /', target: 'activity' },
+      { id: 5, title: 'Water', target: '≥ 2.5 L' },
+      { id: 6, title: 'Meditation', target: '10 min quiet time' },
+      { id: 7, title: 'Reading', target: '≥ 20 min' },
+      { id: 8, title: 'No phone 30 min', target: 'before sleep' },
+      { id: 9, title: 'Planned tomorrow', target: 'before sleeping' }
+    ];
+
+    function createEmptyDays() {
+      const days = [];
+      for (let d = 1; d <= 21; d++) {
+        days.push({
+          day: d,
+          checks: [false, false, false, false, false, false, false, false, false, false],
+          distraction: '',
+          improve: '',
+          waterLiters: 0
+        });
+      }
+      return days;
+    }
+
+    function getTodayISO() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    let appState = {
+      startDate: getTodayISO(),
+      successThreshold: 8,
+      activeDay: 1,
+      activeView: 'sheet', // 'sheet' | 'daily' | 'insights'
+      pledgeSigned: false,
+      certificateName: '',
+      rewards: {
+        day7: '',
+        day14: '',
+        day21: ''
+      },
+      habits: JSON.parse(JSON.stringify(DEFAULT_HABITS)),
+      days: createEmptyDays()
+    };
+
+    // Timer state
+    let timerInterval = null;
+    let timerSecondsLeft = 25 * 60;
+    let timerRunning = false;
+    let currentTimerHabitIndex = 2; // 2 = Study, 6 = Meditation, 7 = Reading
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.days) && parsed.days.length === 21) {
+            appState = Object.assign({}, appState, parsed);
+          }
+        }
+      } catch (e) {
+        // Ignore storage read blocks in restricted iframes
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        // Ignore storage write blocks
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotice');
+      toast.textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout( showToast._t );
+      showToast._t = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2200);
+    }
+
+    function computeEndDate(startISO) {
+      if (!startISO) return '';
+      const parts = startISO.split('-');
+      if (parts.length !== 3) return '';
+      const dt = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      if (isNaN(dt.getTime())) return '';
+      dt.setDate(dt.getDate() + 20); // 21 days inclusive
+      const yyyy = dt.getFullYear();
+      const mm = String(dt.getMonth() + 1).padStart(2, '0');
+      const dd = String(dt.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function getDateLabelForDay(dayNumber) {
+      if (!appState.startDate) return '';
+      const parts = appState.startDate.split('-');
+      if (parts.length !== 3) return '';
+      const dt = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      if (isNaN(dt.getTime())) return '';
+      dt.setDate(dt.getDate() + (dayNumber - 1));
+      return dt.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    }
+
+    function getDayScore(dayObj) {
+      return dayObj.checks.reduce((acc, val) => acc + (val ? 1 : 0), 0);
+    }
+
+    function renderHabitHeaders() {
+      appState.habits.forEach((h, idx) => {
+        const th = document.getElementById(`habitHeader${idx + 1}`);
+        if (!th) return;
+        th.innerHTML = `
+          <div class="flex flex-col items-center justify-end h-44 py-1 gap-2">
+            <div class="vertical-header text-left text-[11px] leading-tight">
+              <span class="font-bold text-white block">${escapeHtml(h.title)}</span>
+              <span class="text-zinc-300 font-normal block">${escapeHtml(h.target)}</span>
+            </div>
+            <span class="w-6 h-6 rounded-full bg-[#d94625] text-white font-extrabold text-xs flex items-center justify-center shrink-0">
+              ${idx + 1}
+            </span>
+          </div>
+        `;
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function renderSheetTable() {
+      const tbody = document.getElementById('sheetTableBody');
+      tbody.innerHTML = '';
+
+      appState.days.forEach((dayObj, dIdx) => {
+        const dayNum = dayObj.day;
+        const isMilestone = (dayNum === 7 || dayNum === 14 || dayNum === 21);
+        const score = getDayScore(dayObj);
+        const isSuccessful = score >= appState.successThreshold;
+        const isActive = (dayNum === appState.activeDay);
+
+        const tr = document.createElement('tr');
+        tr.className = isActive
+          ? 'bg-orange-50/50 hover:bg-orange-50/80 transition'
+          : 'hover:bg-zinc-50/90 transition';
+
+        // Day Number Cell
+        const tdDay = document.createElement('td');
+        tdDay.className = isMilestone
+          ? 'p-2.5 text-center font-black text-white bg-[#d94625] border-r border-zinc-300 cursor-pointer select-none'
+          : 'p-2.5 text-center font-extrabold text-zinc-900 border-r border-zinc-300 cursor-pointer select-none';
+        tdDay.title = 'Click to open Day ' + dayNum + ' in Daily Focus Mode';
+        const dateSub = getDateLabelForDay(dayNum);
+        tdDay.innerHTML = `
+          <div class="leading-none text-base">${dayNum}</div>
+          ${dateSub ? `<div class="text-[10px] font-medium ${isMilestone ? 'text-orange-100' : 'text-zinc-400'} mt-0.5">${dateSub}</div>` : ''}
+        `;
+        tdDay.addEventListener('click', () => {
+          appState.activeDay = dayNum;
+          switchView('daily');
+        });
+        tr.appendChild(tdDay);
+
+        // 10 Checkboxes
+        for (let hIdx = 0; hIdx < 10; hIdx++) {
+          const tdCheck = document.createElement('td');
+          tdCheck.className = 'p-1.5 text-center border-r border-zinc-300 align-middle';
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.className = 'custom-checkbox';
+          input.checked = Boolean(dayObj.checks[hIdx]);
+          input.setAttribute('aria-label', `Day ${dayNum} - ${appState.habits[hIdx].title}`);
+          input.addEventListener('change', () => {
+            appState.days[dIdx].checks[hIdx] = input.checked;
+            if (hIdx === 5 && input.checked && appState.days[dIdx].waterLiters < 2.5) {
+              appState.days[dIdx].waterLiters = 2.5;
+            }
+            appState.activeDay = dayNum;
+            saveState();
+            renderAll();
+          });
+          tdCheck.appendChild(input);
+          tr.appendChild(tdCheck);
+        }
+
+        // Daily Score Cell
+        const tdScore = document.createElement('td');
+        tdScore.className = 'p-2 text-center border-r border-zinc-300 font-bold bg-zinc-100/80';
+        const scoreBadgeColor = score === 10
+          ? 'text-emerald-700 font-black'
+          : (isSuccessful ? 'text-zinc-900 font-extrabold' : (score > 0 ? 'text-amber-700' : 'text-zinc-400'));
+        tdScore.innerHTML = `<span class="${scoreBadgeColor}">${score}</span> <span class="text-zinc-400 font-normal">/ 10</span>`;
+        tr.appendChild(tdScore);
+
+        // Today's Biggest Distraction Cell
+        const tdDistraction = document.createElement('td');
+        tdDistraction.className = 'p-1.5 border-r border-zinc-300';
+        const inpDistraction = document.createElement('input');
+        inpDistraction.type = 'text';
+        inpDistraction.value = dayObj.distraction || '';
+        inpDistraction.placeholder = 'Write distraction...';
+        inpDistraction.className = 'w-full px-2 py-1 text-xs sm:text-sm bg-transparent focus:bg-white rounded focus:outline-none focus:ring-1 focus:ring-[#d94625] text-zinc-800';
+        inpDistraction.addEventListener('input', () => {
+          appState.days[dIdx].distraction = inpDistraction.value;
+          saveState();
+        });
+        tdDistraction.appendChild(inpDistraction);
+        tr.appendChild(tdDistraction);
+
+        // Tomorrow I Will Improve Cell
+        const tdImprove = document.createElement('td');
+        tdImprove.className = 'p-1.5';
+        const inpImprove = document.createElement('input');
+        inpImprove.type = 'text';
+        inpImprove.value = dayObj.improve || '';
+        inpImprove.placeholder = 'Action for tomorrow...';
+        inpImprove.className = 'w-full px-2 py-1 text-xs sm:text-sm bg-transparent focus:bg-white rounded focus:outline-none focus:ring-1 focus:ring-[#d94625] text-zinc-800';
+        inpImprove.addEventListener('input', () => {
+          appState.days[dIdx].improve = inpImprove.value;
+          saveState();
+        });
+        tdImprove.appendChild(inpImprove);
+        tr.appendChild(tdImprove);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderDailyFocusView() {
+      const dayNum = appState.activeDay;
+      const dayObj = appState.days[dayNum - 1];
+      const score = getDayScore(dayObj);
+
+      document.getElementById('dailyViewDayBadge').textContent = `DAY ${dayNum}`;
+      const dateStr = getDateLabelForDay(dayNum);
+      document.getElementById('dailyViewDateLabel').textContent = dateStr ? `(${dateStr})` : '';
+      document.getElementById('dailyViewScoreText').textContent = `${score} / 10`;
+
+      const grid = document.getElementById('dailyHabitsGrid');
+      grid.innerHTML = '';
+
+      appState.habits.forEach((h, hIdx) => {
+        const checked = Boolean(dayObj.checks[hIdx]);
+        const card = document.createElement('label');
+        card.className = checked
+          ? 'flex items-center justify-between p-3.5 rounded-xl border-2 border-[#d94625] bg-orange-50/60 cursor-pointer transition select-none'
+          : 'flex items-center justify-between p-3.5 rounded-xl border border-zinc-200 hover:border-zinc-300 bg-zinc-50/50 cursor-pointer transition select-none';
+
+        card.innerHTML = `
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="w-7 h-7 rounded-full ${checked ? 'bg-[#d94625] text-white' : 'bg-zinc-200 text-zinc-700'} font-extrabold text-xs flex items-center justify-center shrink-0">
+              ${hIdx + 1}
+            </span>
+            <div class="truncate">
+              <p class="text-sm font-bold ${checked ? 'text-zinc-900' : 'text-zinc-800'} truncate">${escapeHtml(h.title)}</p>
+              <p class="text-xs text-zinc-500 truncate">${escapeHtml(h.target)}</p>
+            </div>
+          </div>
+        `;
+
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.className = 'custom-checkbox shrink-0 ml-2';
+        cb.checked = checked;
+        cb.addEventListener('change', () => {
+          dayObj.checks[hIdx] = cb.checked;
+          if (hIdx === 5 && cb.checked && dayObj.waterLiters < 2.5) {
+            dayObj.waterLiters = 2.5;
+          }
+          saveState();
+          renderAll();
+        });
+
+        card.appendChild(cb);
+        grid.appendChild(card);
+      });
+
+      const distInput = document.getElementById('dailyDistractionInput');
+      if (document.activeElement !== distInput) {
+        distInput.value = dayObj.distraction || '';
+      }
+      const impInput = document.getElementById('dailyImproveInput');
+      if (document.activeElement !== impInput) {
+        impInput.value = dayObj.improve || '';
+      }
+
+      // Water tracker UI for active day
+      const liters = Number(dayObj.waterLiters || 0);
+      document.getElementById('waterAmountBadge').textContent = `${liters.toFixed(2)} / 2.5 L`;
+      const pct = Math.min(100, Math.round((liters / 2.5) * 100));
+      document.getElementById('waterProgressBar').style.width = `${pct}%`;
+    }
+
+    function renderStreakAndStats() {
+      const container = document.getElementById('streakCirclesContainer');
+      container.innerHTML = '';
+
+      let daysCompleted = 0; // Any day with at least 1 habit logged or score >= threshold
+      let successfulDays = 0;
+      let currentStreak = 0;
+      let bestStreak = 0;
+      let consecutiveMissedAlert = false;
+
+      // Track last logged day index to detect two missed days in a row
+      let highestLoggedDay = 0;
+      appState.days.forEach((d, idx) => {
+        if (getDayScore(d) > 0 || d.distraction.trim() !== '' || d.improve.trim() !== '') {
+          highestLoggedDay = idx + 1;
+        }
+      });
+
+      let missedRun = 0;
+
+      appState.days.forEach((dayObj) => {
+        const dNum = dayObj.day;
+        const score = getDayScore(dayObj);
+        const isMilestone = (dNum === 7 || dNum === 14 || dNum === 21);
+        const isSuccessful = score >= appState.successThreshold;
+        const hasActivity = score > 0;
+
+        if (hasActivity) {
+          daysCompleted++;
+        }
+
+        if (isSuccessful) {
+          successfulDays++;
+          currentStreak++;
+          if (currentStreak > bestStreak) {
+            bestStreak = currentStreak;
+          }
+          missedRun = 0;
+        } else {
+          currentStreak = 0;
+          if (dNum <= highestLoggedDay) {
+            missedRun++;
+            if (missedRun >= 2) {
+              consecutiveMissedAlert = true;
+            }
+          }
+        }
+
+        // Build Streak Circle button
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'flex flex-col items-center gap-1 group focus:outline-none';
+        btn.title = `Day ${dNum}: ${score}/10 checkpoints (${isSuccessful ? 'Successful Day' : 'Click to view/edit'})`;
+
+        let circleClasses = 'w-9 h-9 rounded-full flex items-center justify-center text-xs font-extrabold border-2 transition ';
+        if (isSuccessful) {
+          circleClasses += isMilestone
+            ? 'bg-[#d94625] border-[#d94625] text-white shadow-sm'
+            : 'bg-zinc-900 border-zinc-900 text-white shadow-sm';
+        } else if (hasActivity) {
+          circleClasses += 'bg-amber-100 border-amber-500 text-amber-900';
+        } else {
+          circleClasses += isMilestone
+            ? 'bg-white border-[#d94625] text-[#d94625] group-hover:bg-orange-50'
+            : 'bg-white border-zinc-400 text-zinc-500 group-hover:border-zinc-700';
+        }
+
+        if (dNum === appState.activeDay) {
+          circleClasses += ' ring-2 ring-offset-2 ring-[#d94625]';
+        }
+
+        btn.innerHTML = `
+          <span class="text-[11px] font-bold ${isMilestone ? 'text-[#d94625]' : 'text-zinc-400'}">${dNum}</span>
+          <div class="${circleClasses}">
+            ${isSuccessful ? '✓' : (hasActivity ? score : '')}
+          </div>
+        `;
+
+        btn.addEventListener('click', () => {
+          appState.activeDay = dNum;
+          saveState();
+          renderAll();
+        });
+
+        container.appendChild(btn);
+      });
+
+      document.getElementById('statDaysCompleted').textContent = `${daysCompleted} / 21`;
+      document.getElementById('statBestStreak').textContent = `${bestStreak} ${bestStreak === 1 ? 'day' : 'days'}`;
+      document.getElementById('statSuccessfulDays').textContent = `${successfulDays}`;
+
+      // Rule #3 Banner ("Never miss two days in a row")
+      const banner = document.getElementById('ruleThreeBanner');
+      const bannerText = document.getElementById('ruleThreeText');
+      if (consecutiveMissedAlert) {
+        banner.className = 'flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-300';
+        bannerText.textContent = 'Rule #3 Alert: Two days below target in a row — bounce back today!';
+      } else {
+        banner.className = 'flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200';
+        bannerText.textContent = 'Rule #3 Check: On track — never miss two days in a row!';
+      }
+
+      // Level Up Rewards Unlock Status
+      updateRewardMilestoneUI(7, successfulDays);
+      updateRewardMilestoneUI(14, successfulDays);
+      updateRewardMilestoneUI(21, successfulDays);
+    }
+
+    function updateRewardMilestoneUI(targetDays, successfulDays) {
+      const statusEl = document.getElementById(`rewardStatus${targetDays}`);
+      const cardEl = document.getElementById(`rewardCard${targetDays}`);
+      if (!statusEl || !cardEl) return;
+
+      if (successfulDays >= targetDays) {
+        statusEl.textContent = 'UNLOCKED 🎉';
+        statusEl.className = 'text-[11px] font-extrabold px-2.5 py-0.5 rounded bg-emerald-600 text-white';
+        cardEl.className = 'flex items-start gap-3.5 p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50/40 transition';
+      } else {
+        statusEl.textContent = `${Math.min(successfulDays, targetDays)} / ${targetDays} Days`;
+        statusEl.className = 'text-[11px] font-bold px-2 py-0.5 rounded bg-zinc-200 text-zinc-700';
+        cardEl.className = 'flex items-start gap-3.5 p-3 rounded-xl border border-zinc-200 bg-zinc-50/60 transition';
+      }
+    }
+
+    function renderAnalyticsView() {
+      const list = document.getElementById('habitBreakdownList');
+      list.innerHTML = '';
+
+      let grandTotal = 0;
+      let loggedDaysCount = 0;
+      let perfectDaysCount = 0;
+
+      appState.days.forEach((d) => {
+        const sc = getDayScore(d);
+        if (sc > 0 || d.distraction.trim() !== '' || d.improve.trim() !== '') {
+          loggedDaysCount++;
+        }
+        if (sc === 10) {
+          perfectDaysCount++;
+        }
+      });
+
+      let strongestHabit = null;
+      let weakestHabit = null;
+
+      appState.habits.forEach((h, hIdx) => {
+        let count = 0;
+        appState.days.forEach((d) => {
+          if (d.checks[hIdx]) count++;
+        });
+        grandTotal += count;
+        const pct = Math.round((count / 21) * 100);
+
+        if (!strongestHabit || count > strongestHabit.count) {
+          strongestHabit = { title: h.title, target: h.target, count, pct };
+        }
+        if (!weakestHabit || count < weakestHabit.count) {
+          weakestHabit = { title: h.title, target: h.target, count, pct };
+        }
+
+        const item = document.createElement('div');
+        item.className = 'p-4 rounded-xl border border-zinc-200 bg-zinc-50 space-y-2';
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-zinc-900 text-white text-xs font-bold flex items-center justify-center">${hIdx + 1}</span>
+              <span class="font-bold text-sm text-zinc-900">${escapeHtml(h.title)} <span class="text-zinc-500 font-normal">(${escapeHtml(h.target)})</span></span>
+            </div>
+            <span class="text-xs font-extrabold text-zinc-800">${count} / 21 days (${pct}%)</span>
+          </div>
+          <div class="w-full bg-zinc-200 h-2.5 rounded-full overflow-hidden">
+            <div class="bg-[#d94625] h-full transition-all duration-300" style="width: ${pct}%"></div>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+
+      document.getElementById('overallCompletionBadge').textContent = `${grandTotal} / 210 Total Checkpoints (${Math.round((grandTotal / 210) * 100)}%)`;
+
+      // Update Top KPI Cards
+      const avgScore = loggedDaysCount > 0 ? (grandTotal / loggedDaysCount).toFixed(1) : '0.0';
+      document.getElementById('kpiAvgScore').textContent = `${avgScore} / 10`;
+      document.getElementById('kpiPerfectDays').textContent = `${perfectDaysCount} ${perfectDaysCount === 1 ? 'day' : 'days'}`;
+
+      if (grandTotal > 0 && strongestHabit && weakestHabit) {
+        document.getElementById('kpiStrongestHabit').textContent = `${strongestHabit.title}`;
+        document.getElementById('kpiStrongestHabitSub').textContent = `${strongestHabit.count} / 21 days completed`;
+        document.getElementById('kpiWeakestHabit').textContent = `${weakestHabit.title}`;
+        document.getElementById('kpiWeakestHabitSub').textContent = `${weakestHabit.count} / 21 days completed`;
+      } else {
+        document.getElementById('kpiStrongestHabit').textContent = '—';
+        document.getElementById('kpiStrongestHabitSub').textContent = 'Check boxes to see top habit';
+        document.getElementById('kpiWeakestHabit').textContent = '—';
+        document.getElementById('kpiWeakestHabitSub').textContent = 'Habit needing most consistency';
+      }
+
+      // Render 21-Day Trend Chart Bars
+      const thresholdPct = Math.min(100, Math.max(10, (appState.successThreshold / 10) * 100));
+      const thresholdLine = document.getElementById('chartThresholdLine');
+      thresholdLine.style.bottom = `${thresholdPct}%`;
+      document.getElementById('chartThresholdLabel').textContent = `Goal: ${appState.successThreshold}/10`;
+
+      const barsContainer = document.getElementById('trendChartBars');
+      barsContainer.innerHTML = '';
+      appState.days.forEach((d) => {
+        const sc = getDayScore(d);
+        const heightPct = Math.max(4, (sc / 10) * 100);
+        const meetsGoal = sc >= appState.successThreshold;
+        const barColor = meetsGoal
+          ? 'bg-emerald-600 hover:bg-emerald-500'
+          : (sc > 0 ? 'bg-amber-500 hover:bg-amber-400' : 'bg-zinc-200 hover:bg-zinc-300');
+
+        const col = document.createElement('button');
+        col.type = 'button';
+        col.className = 'flex-1 h-full flex flex-col justify-end items-center group focus:outline-none min-w-[18px]';
+        col.title = `Day ${d.day}: ${sc}/10 checkpoints (Click to open Day ${d.day})`;
+        col.innerHTML = `
+          <span class="text-[10px] font-bold text-zinc-600 mb-1 opacity-80 group-hover:opacity-100">${sc > 0 ? sc : ''}</span>
+          <div class="w-full max-w-[24px] rounded-t-md transition-all duration-300 ${barColor}" style="height: ${heightPct}%"></div>
+          <span class="text-[10px] font-bold mt-1.5 ${d.day === 7 || d.day === 14 || d.day === 21 ? 'text-[#d94625]' : 'text-zinc-500'}">${d.day}</span>
+        `;
+        col.addEventListener('click', () => {
+          appState.activeDay = d.day;
+          switchView('daily');
+        });
+        barsContainer.appendChild(col);
+      });
+
+      // Render Distraction & Improvement Reflection Log
+      const logList = document.getElementById('distractionLogList');
+      logList.innerHTML = '';
+      const entries = appState.days.filter((d) => d.distraction.trim() !== '' || d.improve.trim() !== '');
+      if (entries.length === 0) {
+        logList.innerHTML = `
+          <div class="p-4 rounded-xl bg-zinc-50 border border-zinc-200 text-xs text-zinc-500 text-center">
+            No distraction or improvement notes logged yet. Type your daily reflection in the 21-Day Sheet or Daily Focus Mode to see your pattern history here!
+          </div>
+        `;
+      } else {
+        entries.forEach((d) => {
+          const row = document.createElement('div');
+          row.className = 'p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs';
+          row.innerHTML = `
+            <div class="flex items-center gap-2.5">
+              <span class="px-2 py-0.5 rounded bg-zinc-900 text-white font-extrabold">Day ${d.day}</span>
+              <span class="font-bold text-zinc-700">Score: ${getDayScore(d)}/10</span>
+            </div>
+            <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:pl-4">
+              <div><span class="font-bold text-red-700">Distraction:</span> <span class="text-zinc-800">${escapeHtml(d.distraction || '—')}</span></div>
+              <div><span class="font-bold text-emerald-700">Next Step:</span> <span class="text-zinc-800">${escapeHtml(d.improve || '—')}</span></div>
+            </div>
+          `;
+          logList.appendChild(row);
+        });
+      }
+    }
+
+    function exportToCSV() {
+      const headers = [
+        'Day',
+        'Date',
+        ...appState.habits.map((h, i) => `#${i + 1} ${h.title} (${h.target})`),
+        'Daily Score (/10)',
+        'Today Biggest Distraction',
+        'Tomorrow I Will Improve'
+      ];
+      const csvRows = [headers.map((h) => `"${String(h).replace(/"/g, '""')}"`).join(',')];
+
+      appState.days.forEach((d) => {
+        const row = [
+          `Day ${d.day}`,
+          getDateLabelForDay(d.day),
+          ...d.checks.map((c) => (c ? 'YES' : 'NO')),
+          getDayScore(d),
+          d.distraction || '',
+          d.improve || ''
+        ];
+        csvRows.push(row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','));
+      });
+
+      const csvString = csvRows.join('\n');
+      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `21-Day-Focus-Challenge-${appState.startDate || 'tracker'}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Downloaded 21-Day CSV spreadsheet!');
+    }
+
+    function openCertificateModal() {
+      let daysLogged = 0;
+      let successDays = 0;
+      let curStreak = 0;
+      let bestStreak = 0;
+      let totalPts = 0;
+
+      appState.days.forEach((d) => {
+        const sc = getDayScore(d);
+        totalPts += sc;
+        if (sc > 0) daysLogged++;
+        if (sc >= appState.successThreshold) {
+          successDays++;
+          curStreak++;
+          if (curStreak > bestStreak) bestStreak = curStreak;
+        } else {
+          curStreak = 0;
+        }
+      });
+
+      document.getElementById('certNameInput').value = appState.certificateName || '';
+      document.getElementById('certDaysLogged').textContent = `${daysLogged} / 21`;
+      document.getElementById('certSuccessDays').textContent = `${successDays}`;
+      document.getElementById('certBestStreak').textContent = `${bestStreak} ${bestStreak === 1 ? 'day' : 'days'}`;
+      document.getElementById('certTotalPoints').textContent = `${totalPts} / 210`;
+
+      const endISO = computeEndDate(appState.startDate);
+      document.getElementById('certDateSpan').textContent = `Mission Window: ${appState.startDate || '—'} → ${endISO || '—'}`;
+
+      let rank = 'Focus Initiate';
+      if (successDays >= 21) rank = '21-Day Focus Master 🏆';
+      else if (successDays >= 14) rank = 'Level 2 Discipline Warrior 🔥';
+      else if (successDays >= 7) rank = '7-Day Streak Builder ⚡';
+      document.getElementById('certRankBadge').textContent = rank;
+
+      const modal = document.getElementById('modalCertificate');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCertificateModal() {
+      const modal = document.getElementById('modalCertificate');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function switchView(viewName) {
+      appState.activeView = viewName;
+      const views = {
+        sheet: document.getElementById('sectionSheetView'),
+        daily: document.getElementById('sectionDailyView'),
+        insights: document.getElementById('sectionInsightsView')
+      };
+      const tabs = {
+        sheet: document.getElementById('tabSheetView'),
+        daily: document.getElementById('tabDailyView'),
+        insights: document.getElementById('tabInsightsView')
+      };
+
+      Object.keys(views).forEach((k) => {
+        if (k === viewName) {
+          views[k].classList.remove('hidden');
+          tabs[k].className = 'px-4 py-2 rounded-lg text-sm font-bold transition bg-zinc-900 text-white shadow-sm';
+        } else {
+          views[k].classList.add('hidden');
+          tabs[k].className = 'px-4 py-2 rounded-lg text-sm font-bold transition text-zinc-700 hover:text-zinc-900';
+        }
+      });
+
+      saveState();
+      renderAll();
+    }
+
+    function renderAll() {
+      // Sync top controls
+      document.getElementById('startDateInput').value = appState.startDate || '';
+      document.getElementById('endDateInput').value = computeEndDate(appState.startDate);
+      document.getElementById('thresholdSelect').value = String(appState.successThreshold);
+
+      // Sync Pledge & Rewards
+      const pledgeCb = document.getElementById('pledgeCheckbox');
+      pledgeCb.checked = Boolean(appState.pledgeSigned);
+      const pledgeBadge = document.getElementById('pledgeBadge');
+      if (appState.pledgeSigned) {
+        pledgeBadge.classList.remove('hidden');
+      } else {
+        pledgeBadge.classList.add('hidden');
+      }
+
+      const r7 = document.getElementById('rewardInput7');
+      if (document.activeElement !== r7) r7.value = appState.rewards.day7 || '';
+      const r14 = document.getElementById('rewardInput14');
+      if (document.activeElement !== r14) r14.value = appState.rewards.day14 || '';
+      const r21 = document.getElementById('rewardInput21');
+      if (document.activeElement !== r21) r21.value = appState.rewards.day21 || '';
+
+      renderHabitHeaders();
+      renderSheetTable();
+      renderDailyFocusView();
+      renderStreakAndStats();
+      renderAnalyticsView();
+    }
+
+    // Focus Timer functions
+    function formatTimer(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function playFinishChime() {
+      try {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        const ctx = new Ctx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.18); // E5
+        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.36); // G5
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.9);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.9);
+      } catch (e) {
+        // Audio optional
+      }
+    }
+
+    function setTimerPreset(minutes, label, habitIdx) {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      timerSecondsLeft = minutes * 60;
+      currentTimerHabitIndex = habitIdx;
+      document.getElementById('timerModeLabel').textContent = label;
+      document.getElementById('timerDisplay').textContent = formatTimer(timerSecondsLeft);
+      document.getElementById('btnTimerStartPause').textContent = 'Start Timer';
+      document.getElementById('timerStatusText').textContent = `Ready for ${label}`;
+    }
+
+    function toggleTimer() {
+      const btn = document.getElementById('btnTimerStartPause');
+      const status = document.getElementById('timerStatusText');
+      if (timerRunning) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        btn.textContent = 'Resume Timer';
+        status.textContent = 'Timer paused';
+      } else {
+        timerRunning = true;
+        btn.textContent = 'Pause Timer';
+        status.textContent = `Focusing on Day ${appState.activeDay}...`;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+          if (timerSecondsLeft > 0) {
+            timerSecondsLeft--;
+            document.getElementById('timerDisplay').textContent = formatTimer(timerSecondsLeft);
+          } else {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            btn.textContent = 'Start Timer';
+            playFinishChime();
+            // Auto-check Meditation (idx 6) or Reading (idx 7) on completion
+            if (currentTimerHabitIndex === 6 || currentTimerHabitIndex === 7) {
+              appState.days[appState.activeDay - 1].checks[currentTimerHabitIndex] = true;
+              saveState();
+              renderAll();
+              status.textContent = `Session complete! Checkpoint #${currentTimerHabitIndex + 1} marked done.`;
+              showToast(`Checkpoint #${currentTimerHabitIndex + 1} completed!`);
+            } else {
+              status.textContent = 'Focus session complete! Great discipline.';
+              showToast('Focus session complete!');
+            }
+          }
+        }, 1000);
+      }
+    }
+
+    function openCustomizeModal() {
+      const container = document.getElementById('customHabitsInputs');
+      container.innerHTML = '';
+      appState.habits.forEach((h, idx) => {
+        const row = document.createElement('div');
+        row.className = 'grid grid-cols-12 gap-2 items-center';
+        row.innerHTML = `
+          <span class="col-span-1 text-xs font-black text-[#d94625] text-center">#${idx + 1}</span>
+          <input id="custTitle${idx}" type="text" value="${escapeHtml(h.title)}" placeholder="Habit name" class="col-span-6 px-2.5 py-1.5 text-xs border border-zinc-300 rounded-lg" />
+          <input id="custTarget${idx}" type="text" value="${escapeHtml(h.target)}" placeholder="Target (e.g. ≥ 8 hrs)" class="col-span-5 px-2.5 py-1.5 text-xs border border-zinc-300 rounded-lg" />
+        `;
+        container.appendChild(row);
+      });
+      const modal = document.getElementById('modalCustomize');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCustomizeModal() {
+      const modal = document.getElementById('modalCustomize');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function loadSampleProgress() {
+      const sampleDistractions = [
+        'Checked phone notifications right after waking up',
+        'YouTube rabbit hole after dinner',
+        'Group chat messages during afternoon study',
+        'Felt tired at 4 PM, scrolled reels for 25 mins',
+        'None! Kept phone in another drawer all morning',
+        'Late afternoon fatigue',
+        'Weekend plans chat with friends'
+      ];
+      const sampleImprovements = [
+        'Enable Do Not Disturb until first 3 study hours are done',
+        'Log out of social apps on desktop browser',
+        'Put phone in backpack during Pomodoro sessions',
+        'Take a 15-minute walk instead of scrolling during breaks',
+        'Prepare tomorrow’s checklist before 9:30 PM',
+        'Drink 1L of water before noon',
+        'Keep strict 10:30 PM lights-out schedule'
+      ];
+
+      const demoPatterns = [
+        [true, true, true, true, true, true, true, true, false, true],   // Day 1: 9/10
+        [true, true, false, true, true, true, true, true, true, true],  // Day 2: 9/10
+        [true, true, true, true, true, true, true, true, true, true],   // Day 3: 10/10
+        [false, true, true, true, true, true, false, true, true, true], // Day 4: 8/10
+        [true, true, true, true, false, true, true, true, true, true],  // Day 5: 9/10
+        [true, true, true, true, true, true, true, true, true, false],  // Day 6: 9/10
+        [true, true, true, true, true, true, true, true, true, true]    // Day 7: 10/10
+      ];
+
+      for (let i = 0; i < 7; i++) {
+        appState.days[i].checks = demoPatterns[i].slice();
+        appState.days[i].distraction = sampleDistractions[i];
+        appState.days[i].improve = sampleImprovements[i];
+        appState.days[i].waterLiters = 2.5;
+      }
+      appState.activeDay = 7;
+      appState.pledgeSigned = true;
+      appState.rewards.day7 = 'Specialty iced coffee + guilt-free movie night';
+      appState.rewards.day14 = 'New wireless headphones';
+      appState.rewards.day21 = 'Weekend getaway trip';
+      saveState();
+      renderAll();
+      showToast('Loaded 7-day sample streak! (7-Day Reward Unlocked)');
+    }
+
+    function initEvents() {
+      // View Tabs
+      document.getElementById('tabSheetView').addEventListener('click', () => switchView('sheet'));
+      document.getElementById('tabDailyView').addEventListener('click', () => switchView('daily'));
+      document.getElementById('tabInsightsView').addEventListener('click', () => switchView('insights'));
+
+      // Date & Threshold inputs
+      document.getElementById('startDateInput').addEventListener('change', (e) => {
+        appState.startDate = e.target.value;
+        saveState();
+        renderAll();
+      });
+
+      document.getElementById('thresholdSelect').addEventListener('change', (e) => {
+        appState.successThreshold = Number(e.target.value) || 8;
+        saveState();
+        renderAll();
+      });
+
+      // Daily Focus View Day Navigation
+      document.getElementById('btnPrevDay').addEventListener('click', () => {
+        appState.activeDay = appState.activeDay > 1 ? appState.activeDay - 1 : 21;
+        saveState();
+        renderAll();
+      });
+      document.getElementById('btnNextDay').addEventListener('click', () => {
+        appState.activeDay = appState.activeDay < 21 ? appState.activeDay + 1 : 1;
+        saveState();
+        renderAll();
+      });
+
+      document.getElementById('btnCheckAllDay').addEventListener('click', () => {
+        const dObj = appState.days[appState.activeDay - 1];
+        const allChecked = dObj.checks.every(Boolean);
+        dObj.checks = dObj.checks.map(() => !allChecked);
+        if (!allChecked) dObj.waterLiters = 2.5;
+        saveState();
+        renderAll();
+      });
+
+      // Daily Reflection Textareas
+      document.getElementById('dailyDistractionInput').addEventListener('input', (e) => {
+        appState.days[appState.activeDay - 1].distraction = e.target.value;
+        saveState();
+        renderSheetTable();
+      });
+      document.getElementById('dailyImproveInput').addEventListener('input', (e) => {
+        appState.days[appState.activeDay - 1].improve = e.target.value;
+        saveState();
+        renderSheetTable();
+      });
+
+      // Water Tracker Buttons
+      document.getElementById('btnWaterPlus').addEventListener('click', () => {
+        const dObj = appState.days[appState.activeDay - 1];
+        dObj.waterLiters = Math.min(4.0, Number((dObj.waterLiters || 0) + 0.25));
+        if (dObj.waterLiters >= 2.5) {
+          dObj.checks[5] = true;
+        }
+        saveState();
+        renderAll();
+      });
+      document.getElementById('btnWaterMinus').addEventListener('click', () => {
+        const dObj = appState.days[appState.activeDay - 1];
+        dObj.waterLiters = Math.max(0, Number((dObj.waterLiters || 0) - 0.25));
+        if (dObj.waterLiters < 2.5) {
+          dObj.checks[5] = false;
+        }
+        saveState();
+        renderAll();
+      });
+      document.getElementById('btnWaterFull').addEventListener('click', () => {
+        const dObj = appState.days[appState.activeDay - 1];
+        dObj.waterLiters = 2.5;
+        dObj.checks[5] = true;
+        saveState();
+        renderAll();
+        showToast('2.5 L reached! Checkpoint #6 checked.');
+      });
+
+      // Timer Buttons
+      document.getElementById('btnPresetStudy').addEventListener('click', () => setTimerPreset(25, 'Study Block (25m)', 2));
+      document.getElementById('btnPresetMeditate').addEventListener('click', () => setTimerPreset(10, 'Meditation (10m)', 6));
+      document.getElementById('btnPresetRead').addEventListener('click', () => setTimerPreset(20, 'Reading (20m)', 7));
+      document.getElementById('btnTimerStartPause').addEventListener('click', toggleTimer);
+      document.getElementById('btnTimerReset').addEventListener('click', () => {
+        if (currentTimerHabitIndex === 6) setTimerPreset(10, 'Meditation (10m)', 6);
+        else if (currentTimerHabitIndex === 7) setTimerPreset(20, 'Reading (20m)', 7);
+        else setTimerPreset(25, 'Study Block (25m)', 2);
+      });
+
+      // Pledge & Rewards
+      document.getElementById('pledgeCheckbox').addEventListener('change', (e) => {
+        appState.pledgeSigned = e.target.checked;
+        saveState();
+        renderAll();
+      });
+      document.getElementById('rewardInput7').addEventListener('input', (e) => {
+        appState.rewards.day7 = e.target.value;
+        saveState();
+      });
+      document.getElementById('rewardInput14').addEventListener('input', (e) => {
+        appState.rewards.day14 = e.target.value;
+        saveState();
+      });
+      document.getElementById('rewardInput21').addEventListener('input', (e) => {
+        appState.rewards.day21 = e.target.value;
+        saveState();
+      });
+
+      // Step 2: Export CSV & Mission Certificate Actions
+      document.getElementById('btnExportCSV').addEventListener('click', exportToCSV);
+      document.getElementById('btnAnalyticsExportCSV').addEventListener('click', exportToCSV);
+      document.getElementById('btnOpenCertificate').addEventListener('click', openCertificateModal);
+      document.getElementById('btnCloseCertificate').addEventListener('click', closeCertificateModal);
+      document.getElementById('btnDoneCertificate').addEventListener('click', closeCertificateModal);
+      document.getElementById('btnPrintCertificate').addEventListener('click', () => window.print());
+      document.getElementById('certNameInput').addEventListener('input', (e) => {
+        appState.certificateName = e.target.value;
+        saveState();
+      });
+
+      // Top Bar Actions
+      document.getElementById('btnLoadDemo').addEventListener('click', loadSampleProgress);
+      document.getElementById('btnCustomizeHabits').addEventListener('click', openCustomizeModal);
+      document.getElementById('btnCloseCustomize').addEventListener('click', closeCustomizeModal);
+      document.getElementById('btnCancelCustomize').addEventListener('click', closeCustomizeModal);
+
+      document.getElementById('btnRestoreDefaultHabits').addEventListener('click', () => {
+        appState.habits = JSON.parse(JSON.stringify(DEFAULT_HABITS));
+        openCustomizeModal();
+      });
+
+      document.getElementById('btnSaveCustomize').addEventListener('click', () => {
+        appState.habits.forEach((h, idx) => {
+          const tEl = document.getElementById(`custTitle${idx}`);
+          const gEl = document.getElementById(`custTarget${idx}`);
+          if (tEl && tEl.value.trim()) h.title = tEl.value.trim();
+          if (gEl) h.target = gEl.value.trim();
+        });
+        saveState();
+        closeCustomizeModal();
+        renderAll();
+        showToast('Custom checkpoints saved!');
+      });
+
+      // Reset Modal
+      const modalReset = document.getElementById('modalReset');
+      document.getElementById('btnOpenResetModal').addEventListener('click', () => {
+        modalReset.classList.remove('hidden');
+        modalReset.classList.add('flex');
+      });
+      document.getElementById('btnCancelReset').addEventListener('click', () => {
+        modalReset.classList.add('hidden');
+        modalReset.classList.remove('flex');
+      });
+      document.getElementById('btnConfirmReset').addEventListener('click', () => {
+        appState.days = createEmptyDays();
+        appState.activeDay = 1;
+        appState.pledgeSigned = false;
+        saveState();
+        modalReset.classList.add('hidden');
+        modalReset.classList.remove('flex');
+        renderAll();
+        showToast('Sheet reset to Day 1!');
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      initEvents();
+      switchView(appState.activeView || 'sheet');
+    });
+  </script>
+</body>
+</html>
